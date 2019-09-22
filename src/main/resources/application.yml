@@ -5,3 +5,5 @@ spark:
     spark.serializer: org.apache.spark.serializer.KryoSerializer
 kafka:
   bootstrap-servers: kafka:9092
+  subscribe: test.in
+  topic: test.out

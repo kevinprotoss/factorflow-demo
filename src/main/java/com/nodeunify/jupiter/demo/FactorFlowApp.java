@@ -36,9 +36,9 @@ public final class FactorFlowApp {
             SecurityException, InstantiationException, StreamingQueryException {
         Yaml yaml = new Yaml();
         InputStream is = FactorFlowApp.class.getClassLoader().getResourceAsStream("application.yml");
-        Map<String, Object> appProps = (Map<String, Object>) yaml.load(is);
+        Map<String, Object> props = (Map<String, Object>) yaml.load(is);
 
-        KafkaIO kafkaIO = KafkaIO.create(appProps);
+        KafkaIO kafkaIO = KafkaIO.create(props);
         Dataset<Quote> quotes = kafkaIO.readData(Quote.class);
         Dataset<Quote> result = kafkaIO.readData("test.out", Quote.class);
         Dataset<String> codes = result.map((MapFunction<Quote, String>) v -> v.getCode(), Encoders.STRING());
