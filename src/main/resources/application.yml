@@ -1,0 +1,7 @@
+spark:
+  master: local
+  appname: FactorFlowApp
+  conf:
+    spark.serializer: org.apache.spark.serializer.KryoSerializer
+kafka:
+  bootstrap-servers: kafka:9092
