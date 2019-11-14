@@ -4,7 +4,7 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
-import com.nodeunify.jupiter.datastream.v1.Quote;
+import com.nodeunify.jupiter.datastream.v1.StockData;
 import com.nodeunify.jupiter.spark.io.KafkaIO;
 
 import org.apache.spark.api.java.function.MapFunction;
@@ -39,9 +39,9 @@ public final class FactorFlowApp {
         Map<String, Object> props = (Map<String, Object>) yaml.load(is);
 
         KafkaIO kafkaIO = KafkaIO.create(props);
-        Dataset<Quote> quotes = kafkaIO.readData(Quote.class);
-        Dataset<Quote> result = kafkaIO.readData("test.out", Quote.class);
-        Dataset<String> codes = result.map((MapFunction<Quote, String>) v -> v.getCode(), Encoders.STRING());
+        Dataset<StockData> stockData = kafkaIO.readData(StockData.class);
+        Dataset<StockData> result = kafkaIO.readData("test.out", StockData.class);
+        Dataset<String> codes = result.map((MapFunction<StockData, String>) v -> v.getCode(), Encoders.STRING());
         // @formatter:off
         StreamingQuery query = codes
             .writeStream()
@@ -49,7 +49,7 @@ public final class FactorFlowApp {
             .format("console")
             .start();
         // @formatter:on
-        kafkaIO.writeData(quotes);
+        kafkaIO.writeData(stockData);
         query.awaitTermination();
     }
 }
